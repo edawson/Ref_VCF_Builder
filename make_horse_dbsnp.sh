@@ -8,8 +8,9 @@
 
 download=0
 index=0
-downloader=axel
-twoBitToFa=../ncbi/twoBitToFa
+#downloader=axel
+downloader=wget
+twoBitToFa=./twoBitToFa
 
 ## download VCF files
 if [ "$download" -eq 1 ]
