@@ -39,7 +39,7 @@ fi
 
 ## unzip the vcf files
 echo "Unzipping files in parallel."
-for i in ${files}; do echo "gzip -d ./temp/$i" >> launchfile.txt; done
+for i in ${files}; do echo "gzip -d ./temp/$i && python ./bin/vcf_check.py ./temp/$i" >> launchfile.txt; done
 python ./bin/LaunChair/launcher.py -i launchfile.txt -c 1
 echo "Done."
 rm launchfile.txt
@@ -68,7 +68,7 @@ java -jar $PICARD CreateSequenceDictionary R=${base_name}.ref.fa O=${base_name}.
 
 ## Run GATK to combine the VCFS
 for i in `ls temp`; do echo "--variant ./temp/$i"; done > temp.txt
-java -Xmx12g -jar $GATK -T CombineVariants -nt 2 \
+java -Xmx4g -jar $GATK -T CombineVariants -nt 2 \
 -R ${base_name}.ref.fa \
 --out ${base_name}.vcf \
 `cat temp.txt`
