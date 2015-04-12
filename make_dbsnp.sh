@@ -39,9 +39,13 @@ fi
 
 ## unzip the vcf files
 echo "Unzipping files in parallel."
-for i in ${files}; do echo "gzip -d ./temp/$i && python ./bin/vcf_check.py ./temp/$i" >> launchfile.txt; done
+for i in ${files}; do echo "gzip -d ./temp/$i" >> launchfile.txt; done
 python ./bin/LaunChair/launcher.py -i launchfile.txt -c 1
 echo "Done."
+rm launchfile.txt
+
+for i in `ls ./temp`; do echo "python ./bin/vcf_check.py ./temp/$i" >> launchfile.txt; done
+python ./bin/LaunChair/launcher.py -i launchfile.txt -c 1
 rm launchfile.txt
 
 # #Download the reference, generate a fasta index using samtools faidx, and make a dict of the horse reference
