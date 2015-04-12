@@ -1,7 +1,7 @@
-## A script to generate the horse reference SNP set
-## If you don't have axel, either download it or use
-## the standard gnu wget. You'll also need the NCBI's
-## twoBitToFa perl script.
+## A script to download a reference genome in 2bit format
+## and a set of VCF calls from NCBI and merge them using
+## GATK.
+
 ## Eric T Dawson
 ## Texas Advanced Computing Center
 ## March 2015
@@ -25,6 +25,8 @@ twoBitToFa=`pwd`/bin/twoBitToFa
 files=`curl ${link} 2>&1 | rev | cut -d " " -f 1 | rev | grep "vcf.gz$"`
 if [ "$download" -eq 1 ]
 then
+	echo "Downloading VCF Files."
+	sleep 1
 	mkdir temp
 	cd temp
 	for i in $files;
@@ -36,7 +38,7 @@ fi
 
 
 ## unzip the vcf files
-echo "Let's unzip those files in parallel!"
+echo "Unzipping files in parallel."
 for i in ${files}; do echo "gzip -d ./temp/$i" >> launchfile.txt; done
 python ./bin/LaunChair/launcher.py -i launchfile.txt -c 1
 echo "Done."
@@ -44,14 +46,14 @@ rm launchfile.txt
 
 # #Download the reference, generate a fasta index using samtools faidx, and make a dict of the horse reference
 # #Download from UCSC
-# if [ "$download" -eq 1 ]
-# then
-# 	${downloader} ${d_args} $ref_link
-# fi
+if [ "$download" -eq 1 ]
+then
+	${downloader} ${d_args} $ref_link
+fi
 # # convert to fasta from 2bit
-# echo "Converting from 2bit to fasta"
-# ref2bit=`basename ${ref_link}`
-# $twoBitToFa ${ref2bit} ${base_name}.ref.fa
+echo "Converting from 2bit to fasta"
+ref2bit=`basename ${ref_link}`
+$twoBitToFa ${ref2bit} ${base_name}.ref.fa
 
 #rename chromosomes if necessary
 notChr=`head -n 100 temp/vcf_chr_1.vcf | grep -v "#" | grep "CHR\|chr" | wc -l`
@@ -71,4 +73,4 @@ java -Xmx12g -jar $GATK -T CombineVariants -nt 2 \
 --out ${base_name}.vcf \
 `cat temp.txt`
 
-#rm -rf temp.txt temp launchfile.txt
+rm -rf temp.txt temp launchfile.txt
