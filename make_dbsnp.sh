@@ -10,7 +10,7 @@
 link=$1
 base_name=$3
 ref_link=$2
-download=0
+download=1
 index=1
 downloader=`pwd`/bin/axel
 d_args="-n 5"
@@ -40,6 +40,7 @@ echo "Let's unzip those files in parallel!"
 for i in ${files}; do echo "gzip -d ./temp/$i" >> launchfile.txt; done
 python ./bin/LaunChair/launcher.py -i launchfile.txt -c 1
 echo "Done."
+rm launchfile.txt
 
 # #Download the reference, generate a fasta index using samtools faidx, and make a dict of the horse reference
 # #Download from UCSC
