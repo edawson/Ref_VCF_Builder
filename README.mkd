@@ -4,7 +4,7 @@ Eric T Dawson
 Texas Advanced Computing Center
 
 ### What is it?
-    A small package that takes a link to reference VCF files for an organism,
+A small package that takes a link to reference VCF files for an organism,
 a link to reference genome in 2bit format, and a basename for output and returns
 a single combined reference VCF. It uses AXEL to accelerate downloads, performs
 basic format checking, and cleans up after itself. It has been tested on the
@@ -15,6 +15,6 @@ equCab2 (horse) reference genome and callset.
 
 
 ### Getting help
-Contact Eric Dawson or Dr. James Carson for help:
-eric<at>tacc.utexas.edu
+Contact Eric Dawson or Dr. James Carson for help:  
+eric at tacc.utexas.edu  
 jcarson<at>tacc.utexas.edu
